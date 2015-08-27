@@ -15,7 +15,8 @@ public class KMeans
     }
 
     double[][] setCentroides(int nClusteres, int nDimensoes, double data[][])
-    {
+    {  
+        
         double centroides[][] = new double[nClusteres][nDimensoes];
         Random random = new Random();
         System.out.println("Init Centroids");
