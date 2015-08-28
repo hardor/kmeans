@@ -105,12 +105,12 @@ public class Graphs extends Main {
         
         XYLineAndShapeRenderer render = (XYLineAndShapeRenderer) plot.getRenderer();
         
-        // -- para os centroides --
+      
         render.setSeriesOutlinePaint(numclusters, Color.GREEN);
         Shape meuShape = ShapeUtilities.createDiagonalCross(7, 0.5f);
         render.setSeriesShape(numclusters, meuShape);
 
-        // -- preenchimento dos pontos --
+      
         render.setSeriesPaint(0, Color.yellow);
         
         render.setBaseFillPaint(Color.yellow);
