@@ -468,74 +468,50 @@ public class Main extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
-//        int i = 0;
-//
-//        //int len=0;
-//        double setosa_SL[] = new double[50]; //location of double arrays to store the data available in fisher data
-//        double setosa_SW[] = new double[50];
-//        double setosa_PL[] = new double[50];
-//        double setosa_PW[] = new double[50];
-//
-//        double versicolor_SL[] = new double[50];
-//        double versicolor_SW[] = new double[50];
-//        double versicolor_PL[] = new double[50];
-//        double versicolor_PW[] = new double[50];
-//
-//        double virginica_SL[] = new double[50];
-//        double virginica_SW[] = new double[50];
-//        double virginica_PL[] = new double[50];
-//        double virginica_PW[] = new double[50];
-//
-//        int secount = 0;
-//        int vecount = 0;
-//        int vicount = 0;
-//
-//        double sl;
-//        double sw;
-//        double pl;
-//        double pw;
-//
-//        for (int j = 0; j < jTable1.getRowCount(); j++) {
-//
-//            sl = Double.parseDouble(((String) jTable1.getValueAt(j, 0)).replace(',', '.'));
-//            sw = Double.parseDouble(((String) jTable1.getValueAt(j, 1)).replace(',', '.'));
-//            pl = Double.parseDouble(((String) jTable1.getValueAt(j, 2)).replace(',', '.'));
-//            pw = Double.parseDouble(((String) jTable1.getValueAt(j, 3)).replace(',', '.'));
-//
-//            if (((String) jTable1.getValueAt(j, 4)).equals("SETOSA")) {
-//                setosa_SL[secount] = sl;
-//                setosa_SW[secount] = sw;
-//                setosa_PL[secount] = pl;
-//                setosa_PW[secount] = pw;
-//                secount++;
-//
-//            } else if (((String) jTable1.getValueAt(j, 4)).equals("VIRGINIC")) {
-//                virginica_SL[vicount] = sl;
-//                virginica_SW[vicount] = sw;
-//                virginica_PL[vicount] = pl;
-//                virginica_PW[vicount] = pw;
-//
-//                vicount++;
-//
-//            } else if (((String) jTable1.getValueAt(j, 4)).equals("VERSICOL")) {
-//                versicolor_SL[vecount] = sl;
-//                versicolor_SW[vecount] = sw;
-//                versicolor_PL[vecount] = pl;
-//                versicolor_PW[vecount] = pw;
-//
-//                vecount++;
-//
-//            }
-//
-//        }
-        String cell;
-        double data[][] = new double[jTable1.getRowCount()][jTable1.getColumnCount()];
-        for (int i = 0; i < jTable1.getRowCount(); i++) {
-            for (int j = 0; j < jTable1.getColumnCount() - 2; j++) {
-                cell = jTable1.getValueAt(i, j).toString();
+        //int len=0;
+        double SL[] = new double[150]; //location of double arrays to store the data available in fisher data
+        double SW[] = new double[150];
+        double PL[] = new double[150];
+        double PW[] = new double[150];
 
-                data[i][j] = Double.parseDouble(cell.replace(',', '.'));
+        for (int j = 0; j < jTable1.getRowCount(); j++) {
+
+            SL[j] = Double.parseDouble(((String) jTable1.getValueAt(j, 0)).replace(',', '.'));
+            SW[j] = Double.parseDouble(((String) jTable1.getValueAt(j, 1)).replace(',', '.'));
+            PL[j] = Double.parseDouble(((String) jTable1.getValueAt(j, 2)).replace(',', '.'));
+            PW[j] = Double.parseDouble(((String) jTable1.getValueAt(j, 3)).replace(',', '.'));
+
+        }
+
+        String cell;
+        double data[][] = new double[jTable1.getRowCount()][getDimension()];
+
+        int num = 0;
+
+        if (jCheckBox1.isSelected() == true) {
+            for (int i = 0; i < jTable1.getRowCount(); i++) {
+                data[i][num] = SL[i];
             }
+            num++;
+        }
+
+        if (jCheckBox2.isSelected() == true) {
+            for (int i = 0; i < jTable1.getRowCount(); i++) {
+                data[i][num] = SW[i];
+            }
+            num++;
+        }
+        if (jCheckBox3.isSelected() == true) {
+            for (int i = 0; i < jTable1.getRowCount(); i++) {
+                data[i][num] = PL[i];
+            }
+            num++;
+        }
+        if (jCheckBox4.isSelected() == true) {
+            for (int i = 0; i < jTable1.getRowCount(); i++) {
+                data[i][num] = PW[i];
+            }
+            num++;
         }
 
         KMeans kmeans = new KMeans();
@@ -545,10 +521,11 @@ public class Main extends javax.swing.JFrame {
         double[][] centroides;
         int[] location;
         int[] newLocation;
+
         int iterration;
         double error;
 
-        for (int n = 0; n < getExperiments(); n++) {            
+        for (int n = 0; n < getExperiments(); n++) {
             iterration = 0;
             location = new int[data.length];
             newLocation = new int[data.length];
@@ -582,16 +559,21 @@ public class Main extends javax.swing.JFrame {
 
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
             model.setColumnCount(5);
-            model.addColumn("Cluster №", Arrays.toString(newLocation).split("[\\[\\]]")[1].split(", "));
+
+            int[] finalLocation = new int[newLocation.length];
+            for (int i = 0; i < newLocation.length; i++) {
+                finalLocation[i] = newLocation[i] + 1;
+            }
+            model.addColumn("Cluster №", Arrays.toString(finalLocation).split("[\\[\\]]")[1].split(", "));
 
             for (int i = 0; i < getNumcluster(); i++) {
-                    jTextArea1.append("Кластер " + (i + 1) + ":\n");
-                    for (int j = 0; j < centroides[i].length; j++) {
-                        jTextArea1.append(centroides[i][j] + "\n");
-                    }
-                    jTextArea1.append("\n");
-                }     
-            jTextArea1.append("Error: " + error +"\n");
+                jTextArea1.append("Кластер " + (i + 1) + ":\n");
+                for (int j = 0; j < centroides[i].length; j++) {
+                    jTextArea1.append(centroides[i][j] + "\n");
+                }
+                jTextArea1.append("\n");
+            }
+            jTextArea1.append("Error: " + error + "\n");
             jTextArea1.append("=======================================\n");
             //resform.addRowToTable(n + 1, centroides, getNumcluster(), error);
 

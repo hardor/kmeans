@@ -1,7 +1,3 @@
-// Decompiled by DJ v3.12.12.100 Copyright 2015 Atanas Neshkov  Date: 28.08.2015 1:48:47
-// Home Page:  http://www.neshkov.com/dj.html - Check often for new version!
-// Decompiler options: packimports(3) 
-// Source File Name:   KMeans.java
 
 package kmeans;
 
